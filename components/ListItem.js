@@ -8,7 +8,7 @@ const ListItem = (props) => {
     <TouchableOpacity style={styles.row}>
       <View style={styles.imagebox}>
         <Image
-          source={{uri: uploadsUrl + props.singleMedia.thumbnails.w160}}
+          source={{uri: uploadsUrl + props.singleMedia.thumbnails?.w160}}
           style={styles.image}
         />
       </View>
