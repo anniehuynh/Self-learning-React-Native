@@ -1,7 +1,5 @@
 import React, {useContext} from 'react';
-import {StyleSheet, SafeAreaView, Text} from 'react-native';
-import {Button} from 'react-native-web';
-
+import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 
 const Profile = () => {
