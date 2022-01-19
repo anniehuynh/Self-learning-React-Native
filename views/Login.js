@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
 const Login = ({navigation}) => {
-  const [isLoggedIn, setIsLoggedIn] = useContext(MainContext);
+  const {setIsLoggedIn} = useContext(MainContext);
 
   const logIn = () => {
     console.log('Button pressed');
