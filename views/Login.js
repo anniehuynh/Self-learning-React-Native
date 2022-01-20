@@ -1,30 +1,27 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import LoginForm from '../components/LoginForm';
 import {MainContext} from '../contexts/MainContext';
-import {useLogin, useUser} from '../hooks/ApiHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser} from '../hooks/ApiHooks';
+import LoginForm from '../components/LoginForm';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
-  const {postLogin} = useLogin();
   const {getUserByToken} = useUser();
 
   const checkToken = async () => {
-    const userToken = await AsyncStorage.getItem('userToken'); // read userTOken from AsyncStorage
+    const userToken = await AsyncStorage.getItem('userToken');
+    // console.log('token value in async storage', userToken);
     if (!userToken) {
       return;
     }
     try {
       const userData = await getUserByToken(userToken);
-      console.log('checktoken and userData', userData);
-      if (userToken === 'abcdef') {
-        setIsLoggedIn(true);
-      }
-    } catch (e) {
-      console.error(e);
+      console.log('chekToken', userData);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -32,23 +29,10 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
-  const logIn = async () => {
-    const data = {username: 'anhuynh', password: 'postmanpassword'};
-    try {
-      const userData = await postLogin(data);
-      if (userData) {
-        await AsyncStorage.setItem('userToken', userData.token);
-        setIsLoggedIn(true);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
   return (
     <View style={styles.container}>
       <Text>Login</Text>
       <LoginForm />
-      <Button title="Sign in!" onPress={logIn} />
     </View>
   );
 };

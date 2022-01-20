@@ -66,7 +66,7 @@ const LoginForm = () => {
             onChangeText={onChange}
             value={value}
             autoCapitalize="none"
-            placeholder="Username"
+            placeholder="Password"
           />
         )}
         name="password"
