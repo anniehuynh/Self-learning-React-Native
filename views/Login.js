@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import LoginForm from '../components/LoginForm';
 import {MainContext} from '../contexts/MainContext';
 import {useLogin, useUser} from '../hooks/ApiHooks';
 
@@ -46,6 +47,7 @@ const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text>Login</Text>
+      <LoginForm />
       <Button title="Sign in!" onPress={logIn} />
     </View>
   );
