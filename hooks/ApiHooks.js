@@ -20,7 +20,6 @@ const useMedia = () => {
         })
       );
       setMediaArray(media);
-      console.log(mediaArray);
     } catch (error) {
       console.log(error);
     }
