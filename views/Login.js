@@ -4,16 +4,25 @@ import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {MainContext} from '../contexts/MainContext';
+import {useLogin, useUser} from '../hooks/ApiHooks';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
+  const {postLogin} = useLogin();
+  const {getUserByToken} = useUser();
 
   const checkToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken'); // read userTOken from AsyncStorage
     console.log('Token', userToken);
-    // token validation
-    if (userToken === 'abcdef') {
-      setIsLoggedIn(true);
+
+    try {
+      const userData = await getUserByToken(userToken);
+      console.log('checktoken and userData', userData);
+      if (userToken === 'abcdef') {
+        setIsLoggedIn(true);
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -22,9 +31,16 @@ const Login = ({navigation}) => {
   }, []);
 
   const logIn = async () => {
-    console.log('Button pressed');
-    await AsyncStorage.setItem('userToken', 'abcdef');
-    setIsLoggedIn(true);
+    const data = {username: 'anhuynh', password: 'postmanpassword'};
+    try {
+      const userData = await postLogin(data);
+      if (userData) {
+        await AsyncStorage.setItem('userToken', userData.token);
+        setIsLoggedIn(true);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
   return (
     <View style={styles.container}>
