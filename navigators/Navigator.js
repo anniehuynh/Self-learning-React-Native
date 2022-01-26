@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Home from '../views/Home';
 import Profile from '../views/Profile';
@@ -18,9 +19,24 @@ const TabScreen = () => {
       <Tab.Screen
         name="Home"
         component={Home}
-        // options={{headerShown: false}}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
       ></Tab.Screen>
-      <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
+          ),
+        }}
+      ></Tab.Screen>
     </Tab.Navigator>
   );
 };

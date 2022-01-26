@@ -3,6 +3,7 @@ import {StatusBar} from 'expo-status-bar';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {FeatherIconsPack} from './utils/feather-icons';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 import {default as theme} from './theme.json';
 import {default as mapping} from './mapping.json';
@@ -23,7 +24,7 @@ const App = () => {
 // eslint-disable-next-line react/display-name
 export default () => (
   <>
-    <IconRegistry icons={FeatherIconsPack} />
+    <IconRegistry icons={[EvaIconsPack, FeatherIconsPack]} />
     <ApplicationProvider
       {...eva}
       theme={{...eva.light, ...theme}}
