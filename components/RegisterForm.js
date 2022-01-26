@@ -1,6 +1,7 @@
 import React from 'react';
-import {Text, View, TextInput, Button} from 'react-native';
+import {Text, View, TextInput} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {Button} from '@ui-kitten/components';
 
 import {useUser} from '../hooks/ApiHooks';
 
@@ -39,7 +40,7 @@ const RegisterForm = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            style={{borderWidth: 1}}
+            style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -58,7 +59,7 @@ const RegisterForm = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            style={{borderWidth: 1}}
+            style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -78,7 +79,7 @@ const RegisterForm = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            style={{borderWidth: 1}}
+            style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -94,7 +95,7 @@ const RegisterForm = () => {
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            style={{borderWidth: 1}}
+            style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -105,7 +106,13 @@ const RegisterForm = () => {
         name="full_name"
       />
 
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+      <Button
+        style={{margin: 10, width: 250}}
+        title="Submit"
+        onPress={handleSubmit(onSubmit)}
+      >
+        Submit
+      </Button>
     </View>
   );
 };

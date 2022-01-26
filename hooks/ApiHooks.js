@@ -90,4 +90,22 @@ const useUser = () => {
   return {getUserByToken, postUser};
 };
 
-export {useMedia, useLogin, useUser};
+const useTag = () => {
+  const postTag = async (tagData, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(tagData),
+    };
+    return await doFetch(apiUrl + 'tags/', options);
+  };
+
+  const getFilesByTag = async (tag) => {
+    return await doFetch(apiUrl + 'tags/' + tag);
+  };
+
+  return {postTag, getFilesByTag};
+};
+export {useMedia, useLogin, useUser, useTag};
