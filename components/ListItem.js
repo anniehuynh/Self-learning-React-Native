@@ -1,53 +1,62 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, Text, Card} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 
 const ListItem = ({navigation, singleMedia}) => {
   return (
-    <TouchableOpacity
-      style={styles.row}
-      onPress={() => {
-        navigation.navigate('Single', {file: singleMedia});
-      }}
-    >
-      <View style={styles.imagebox}>
-        <Image
-          source={{uri: uploadsUrl + singleMedia.thumbnails?.w160}}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.textbox}>
-        <Text style={styles.listTitle}>{singleMedia.title}</Text>
-        <Text>{singleMedia.description}</Text>
-      </View>
-    </TouchableOpacity>
+    <Card>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => {
+          navigation.navigate('Single', {file: singleMedia});
+        }}
+      >
+        <View style={styles.imagebox}>
+          <Image
+            style={styles.image}
+            source={{uri: uploadsUrl + singleMedia.thumbnails?.w160}}
+          />
+        </View>
+
+        <Text style={styles.title}>{singleMedia.title}</Text>
+
+        <Button style={styles.button} title="View">
+          View
+        </Button>
+      </TouchableOpacity>
+    </Card>
   );
 };
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    padding: 15,
-    backgroundColor: 'aliceblue',
-    borderRadius: 6,
     marginHorizontal: 10,
-    marginBottom: 5,
+  },
+  button: {
+    flex: 1,
+    margin: 5,
+    right: -30,
+    width: 40,
+    height: 50,
+    alignSelf: 'center',
   },
   imagebox: {
     flex: 1,
+    alignSelf: 'center',
   },
   image: {
     flex: 1,
-    borderRadius: 6,
+    marginStart: -30,
+    width: 100,
+    height: 100,
   },
-  textbox: {
+  title: {
     flex: 2,
-    padding: 10,
-  },
-  listTitle: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    paddingBottom: 15,
+    alignSelf: 'center',
+    margin: 30,
+    fontWeight: '500',
   },
 });
 

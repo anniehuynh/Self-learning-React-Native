@@ -1,7 +1,5 @@
 import React, {useContext, useEffect} from 'react';
 import {
-  StyleSheet,
-  Text,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
@@ -9,7 +7,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Button, Icon} from '@ui-kitten/components';
+import {Button, Text, Icon} from '@ui-kitten/components';
 
 import {MainContext} from '../contexts/MainContext';
 import {useUser} from '../hooks/ApiHooks';
@@ -46,8 +44,13 @@ const Login = ({navigation}) => {
       activeOpacity={1}
     >
       <KeyboardAvoidingView
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+        }}
         behavior={Platform.OS === 'ios' ? 'padding' : ''}
-        style={styles.container}
       >
         <Text style={{fontWeight: '500', fontSize: 18, marginVertical: 10}}>
           Login
@@ -65,15 +68,6 @@ const Login = ({navigation}) => {
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Login.propTypes = {
   navigation: PropTypes.object,
