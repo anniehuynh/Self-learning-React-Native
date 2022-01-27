@@ -56,7 +56,9 @@ const Login = ({navigation}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : ''}
       >
         <View>
-          <Text style={styles.appTitle}>My App</Text>
+          <Text category={'h6'} style={styles.appTitle}>
+            My App
+          </Text>
         </View>
         <View style={styles.form}>
           <Card>
@@ -75,7 +77,9 @@ const Login = ({navigation}) => {
           </Card>
           {formToggle ? (
             <Card style={styles.card}>
-              <Text style={styles.text}>Login</Text>
+              <Text category="s1" style={styles.text}>
+                Login
+              </Text>
               <LoginForm />
               <Button accessoryLeft={<Icon name="facebook" />}>
                 Login with Facebook
@@ -83,7 +87,9 @@ const Login = ({navigation}) => {
             </Card>
           ) : (
             <Card style={styles.card}>
-              <Text style={styles.text}>Sign up</Text>
+              <Text category="s1" style={styles.text}>
+                Sign up
+              </Text>
               <RegisterForm />
             </Card>
           )}
@@ -110,6 +116,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 18,
     marginVertical: 10,
+    alignSelf: 'center',
   },
 });
 export default Login;

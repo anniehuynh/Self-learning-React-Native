@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, SafeAreaView, Image} from 'react-native';
-import {Text, Card} from '@ui-kitten/components';
+import {Text, Card, Divider} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 
 import {uploadsUrl} from '../utils/variables';
@@ -10,7 +10,10 @@ const Single = ({route}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Card style={styles.card}>
-        <Text>{file.title}</Text>
+        <Text category="s1" style={styles.title}>
+          {file.title}
+        </Text>
+        <Divider />
         <Image
           source={{uri: uploadsUrl + file.filename}}
           style={styles.image}
@@ -40,6 +43,11 @@ const styles = StyleSheet.create({
     height: 450,
     alignSelf: 'center',
     margin: 20,
+  },
+  title: {
+    alignSelf: 'center',
+    fontSize: 20,
+    marginVertical: 10,
   },
 });
 
