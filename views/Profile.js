@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button, Image} from 'react-native';
+import {StyleSheet, SafeAreaView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Text, Avatar, Button} from '@ui-kitten/components';
 
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks/ApiHooks';
@@ -29,11 +30,7 @@ const Profile = () => {
     <SafeAreaView style={styles.container}>
       <Text>Profile</Text>
       <Text>{user.username}</Text>
-      <Image
-        source={{uri: avatar}}
-        style={{width: '80%', height: undefined}}
-        resizeMode="contain"
-      />
+      <Avatar source={{uri: avatar}} size="giant" resizeMode="cover" />
       <Text>{user.email}</Text>
       <Text>{user.full_name}</Text>
       <Button
