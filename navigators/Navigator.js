@@ -9,6 +9,7 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
+import ModifyUser from '../views/ModifyUser';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,10 @@ const StackScreen = () => {
             options={{headerShown: false}}
           ></Stack.Screen>
           <Stack.Screen name="Single" component={Single}></Stack.Screen>
+          <Stack.Screen
+            name="Edit Profile"
+            component={ModifyUser}
+          ></Stack.Screen>
         </>
       ) : (
         <Stack.Screen name="Login" component={Login}></Stack.Screen>

@@ -12,12 +12,13 @@ import {
   Icon,
 } from '@ui-kitten/components';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import PropTypes from 'prop-types';
 
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {getFilesByTag} = useTag();
@@ -73,12 +74,23 @@ const Profile = () => {
         <Button
           title="Log out!"
           accessoryLeft={<Icon name="log-out-outline" />}
+          style={{marginTop: 15, width: 320}}
           onPress={async () => {
             await AsyncStorage.clear();
             setIsLoggedIn(false);
           }}
         >
           Log Out
+        </Button>
+        <Button
+          title="Modify user"
+          accessoryLeft={<Icon name="edit-2-outline" />}
+          style={{marginTop: 15, width: 320}}
+          onPress={() => {
+            navigation.navigator('Modify user');
+          }}
+        >
+          Edit Profile
         </Button>
       </Card>
     </Layout>
@@ -115,5 +127,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+Profile.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default Profile;
