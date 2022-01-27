@@ -90,7 +90,7 @@ const Login = ({navigation}) => {
               <Text category="s1" style={styles.text}>
                 Sign up
               </Text>
-              <RegisterForm />
+              <RegisterForm setFormToggle={setFormToggle} />
             </Card>
           )}
         </View>
