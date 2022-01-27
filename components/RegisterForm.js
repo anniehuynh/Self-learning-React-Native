@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, View, TextInput} from 'react-native';
+import {View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {Button} from '@ui-kitten/components';
+import {Button, Text, Input} from '@ui-kitten/components';
 
 import {useUser} from '../hooks/ApiHooks';
 
@@ -19,6 +19,7 @@ const RegisterForm = () => {
       email: '',
       full_name: '',
     },
+    mode: 'onBlur',
   });
 
   const onSubmit = async (data) => {
@@ -39,7 +40,7 @@ const RegisterForm = () => {
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
@@ -50,7 +51,7 @@ const RegisterForm = () => {
         )}
         name="username"
       />
-      {errors.username && <Text>This is required.</Text>}
+      {errors.username && <Text>Username taken</Text>}
 
       <Controller
         control={control}
@@ -58,7 +59,7 @@ const RegisterForm = () => {
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
@@ -78,7 +79,7 @@ const RegisterForm = () => {
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}
@@ -94,7 +95,7 @@ const RegisterForm = () => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             style={{borderWidth: 1, padding: 8, margin: 8, width: 250}}
             onBlur={onBlur}
             onChangeText={onChange}

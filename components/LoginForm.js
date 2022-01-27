@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {Text, View, TextInput} from 'react-native';
+import {View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {MainContext} from '../contexts/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Button} from '@ui-kitten/components';
+import {Button, Input, Text} from '@ui-kitten/components';
 
 const LoginForm = () => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -40,7 +40,7 @@ const LoginForm = () => {
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             style={{
               borderWidth: 1,
               padding: 8,
@@ -65,7 +65,7 @@ const LoginForm = () => {
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             style={{
               borderWidth: 1,
               padding: 8,
