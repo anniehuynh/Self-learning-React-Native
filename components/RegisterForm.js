@@ -6,7 +6,7 @@ import {Button, Text, Input} from '@ui-kitten/components';
 import {useUser} from '../hooks/ApiHooks';
 
 const RegisterForm = () => {
-  const {postUser} = useUser();
+  const {postUser, checkUsername} = useUser();
 
   const {
     control,
@@ -37,7 +37,23 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: {value: true, message: 'This is required!'},
+          minLength: {
+            value: 3,
+            message: 'Username has to be at least 3 characters',
+          },
+          validate: async (value) => {
+            try {
+              const available = await checkUsername(value);
+              if (available) {
+                return true;
+              } else {
+                return 'Username is already taken!';
+              }
+            } catch (error) {
+              throw new Error(error.message);
+            }
+          },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -51,7 +67,9 @@ const RegisterForm = () => {
         )}
         name="username"
       />
-      {errors.username && <Text>Username taken</Text>}
+      {errors.username && (
+        <Text status="danger">Username is already taken</Text>
+      )}
 
       <Controller
         control={control}
