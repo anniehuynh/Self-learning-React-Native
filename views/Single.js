@@ -10,12 +10,12 @@ const Single = ({route}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Card style={styles.card}>
+        <Text>{file.title}</Text>
         <Image
           source={{uri: uploadsUrl + file.filename}}
           style={styles.image}
           resizeMode="cover"
         />
-        <Text>{file.title}</Text>
         <Text>{file.description}</Text>
       </Card>
     </SafeAreaView>
