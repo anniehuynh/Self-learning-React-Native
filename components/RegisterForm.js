@@ -68,7 +68,7 @@ const RegisterForm = () => {
         name="username"
       />
       {errors.username && (
-        <Text status="danger">Username is already taken</Text>
+        <Text status="danger">{errors.username.message}</Text>
       )}
 
       <Controller
@@ -89,7 +89,7 @@ const RegisterForm = () => {
         )}
         name="password"
       />
-      {errors.password && <Text>This is required.</Text>}
+      {errors.password && <Text status="danger">This is required.</Text>}
 
       <Controller
         control={control}
@@ -108,7 +108,7 @@ const RegisterForm = () => {
         )}
         name="email"
       />
-      {errors.email && <Text>This is required.</Text>}
+      {errors.email && <Text status="danger">This is required.</Text>}
 
       <Controller
         control={control}
