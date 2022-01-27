@@ -83,11 +83,11 @@ const Profile = ({navigation}) => {
           Log Out
         </Button>
         <Button
-          title="Modify user"
+          title="Edit Profile"
           accessoryLeft={<Icon name="edit-2-outline" />}
           style={{marginTop: 15, width: 320}}
           onPress={() => {
-            navigation.navigator('Modify user');
+            navigation.navigate('Edit Profile');
           }}
         >
           Edit Profile

@@ -104,7 +104,8 @@ Login.propTypes = {
 };
 const styles = StyleSheet.create({
   appTitle: {
-    margin: 20,
+    marginTop: 70,
+    marginBottom: 25,
     justifyContent: 'center',
     alignItems: 'center',
   },
