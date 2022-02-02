@@ -2,7 +2,16 @@ import React, {useContext, useState} from 'react';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {ScrollView, StyleSheet, Image, Alert} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Image,
+  Alert,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Card, Input, Text} from '@ui-kitten/components';
 import * as ImagePicker from 'expo-image-picker';
@@ -84,70 +93,79 @@ const Upload = ({navigation}) => {
   };
 
   return (
-    <ScrollView>
-      <Card>
-        <Image
-          source={{uri: image}}
-          style={styles.image}
-          onPress={pickImage}
-        ></Image>
-
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              placeholder="Title"
-            />
-          )}
-          name="title"
-        />
-        {errors.title && <Text>This is required.</Text>}
-
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              placeholder="Description"
-            />
-          )}
-          name="description"
-        />
-        {errors.description && <Text>This is required.</Text>}
-
-        <Button
-          style={styles.button}
-          size="medium"
-          title="Choose image"
-          onPress={pickImage}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : ''}
+    >
+      <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
+        <Card
+          style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}
         >
-          Choose Image
-        </Button>
-        <Button
-          style={styles.button}
-          size="medium"
-          title="Upload"
-          onPress={handleSubmit(onSubmit)}
-        >
-          Upload
-        </Button>
-      </Card>
-    </ScrollView>
+          <ScrollView>
+            <Image
+              source={{uri: image}}
+              style={styles.image}
+              onPress={pickImage}
+            ></Image>
+
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  autoCapitalize="none"
+                  placeholder="Title"
+                />
+              )}
+              name="title"
+            />
+            {errors.title && <Text>This is required.</Text>}
+
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  autoCapitalize="none"
+                  placeholder="Description"
+                />
+              )}
+              name="description"
+            />
+            {errors.description && <Text>This is required.</Text>}
+
+            <Button
+              style={styles.button}
+              size="medium"
+              title="Choose image"
+              onPress={pickImage}
+            >
+              Choose Image
+            </Button>
+            <Button
+              style={styles.button}
+              size="medium"
+              title="Upload"
+              onPress={handleSubmit(onSubmit)}
+            >
+              Upload
+            </Button>
+          </ScrollView>
+        </Card>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -155,6 +173,12 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 10,
     marginTop: 15,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
   image: {
     width: '100%',
