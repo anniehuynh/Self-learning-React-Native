@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Single from '../views/Single';
+import Upload from '../views/Upload';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import ModifyUser from '../views/ModifyUser';
@@ -27,7 +28,20 @@ const TabScreen = () => {
           ),
         }}
       ></Tab.Screen>
-
+      <Tab.Screen
+        name="Upload"
+        component={Upload}
+        options={{
+          tabBarLabel: 'Upload',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="cloud-upload-outline"
+              color={color}
+              size={26}
+            />
+          ),
+        }}
+      ></Tab.Screen>
       <Tab.Screen
         name="Profile"
         component={Profile}

@@ -29,6 +29,7 @@ const Login = ({navigation}) => {
     try {
       const userData = await getUserByToken(userToken);
       console.log('checkToken', userData);
+      console.log('token', userToken);
       setUser(userData);
       setIsLoggedIn(true);
     } catch (error) {
@@ -99,9 +100,6 @@ const Login = ({navigation}) => {
   );
 };
 
-Login.propTypes = {
-  navigation: PropTypes.object,
-};
 const styles = StyleSheet.create({
   appTitle: {
     marginTop: 70,
@@ -120,4 +118,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+
+Login.propTypes = {
+  navigation: PropTypes.object,
+};
+
 export default Login;
