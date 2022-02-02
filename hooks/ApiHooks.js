@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 import {apiUrl} from '../utils/variables';
 
@@ -22,6 +23,7 @@ const doFetch = async (url, options = {}) => {
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const {update} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
     try {
       const response = await fetch(
@@ -45,9 +47,10 @@ const useMedia = () => {
     }
   };
   // Call loadMedia() only once when the component is loaded
+  // Or when the update state(MainContext) is changed
   useEffect(() => {
-    loadMedia(0, 5);
-  }, []);
+    loadMedia(0, 10);
+  }, [update]);
 
   const postMedia = async (formData, token) => {
     const options = {
