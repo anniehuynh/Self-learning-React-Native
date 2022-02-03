@@ -91,7 +91,7 @@ const Upload = ({navigation}) => {
       console.log('onSubmit upload image problem');
     }
   };
-
+  console.log('loading', loading);
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -125,7 +125,7 @@ const Upload = ({navigation}) => {
               )}
               name="title"
             />
-            {errors.title && <Text>This is required.</Text>}
+            {errors.title && <Text status="danger">This is required.</Text>}
 
             <Controller
               control={control}
@@ -144,7 +144,9 @@ const Upload = ({navigation}) => {
               )}
               name="description"
             />
-            {errors.description && <Text>This is required.</Text>}
+            {errors.description && (
+              <Text status="danger">This is required.</Text>
+            )}
 
             <Button
               style={styles.button}
@@ -155,6 +157,7 @@ const Upload = ({navigation}) => {
               Choose Image
             </Button>
             <Button
+              disabled={!imageSelected}
               loading={loading}
               style={styles.button}
               size="medium"
