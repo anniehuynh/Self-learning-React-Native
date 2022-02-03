@@ -17,6 +17,7 @@ import {
   ButtonGroup,
   Layout,
 } from '@ui-kitten/components';
+import Logo from '../assets/logo.svg';
 
 import {MainContext} from '../contexts/MainContext';
 import {useUser} from '../hooks/ApiHooks';
@@ -58,7 +59,14 @@ const Login = ({navigation}) => {
           <Text category={'h6'} style={styles.appTitle}>
             My App
           </Text>
-
+          <Logo
+            style={{
+              width: 70,
+              height: 70,
+              alignSelf: 'center',
+              marginBottom: 20,
+            }}
+          />
           <ButtonGroup
             style={{
               justifyContent: 'center',
@@ -72,13 +80,15 @@ const Login = ({navigation}) => {
 
           {formToggle ? (
             <Card style={styles.form}>
-              <Text category="s1" style={styles.text}>
-                Login
-              </Text>
-              <LoginForm />
-              <Button accessoryLeft={<Icon name="facebook" />}>
-                Login with Facebook
-              </Button>
+              <ScrollView>
+                <Text category="s1" style={styles.text}>
+                  Login
+                </Text>
+                <LoginForm />
+                <Button accessoryLeft={<Icon name="facebook" />}>
+                  Login with Facebook
+                </Button>
+              </ScrollView>
             </Card>
           ) : (
             <Card style={styles.form}>

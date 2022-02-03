@@ -1,6 +1,7 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {
   ScrollView,
@@ -16,22 +17,26 @@ import {Controller, useForm} from 'react-hook-form';
 import {Button, Card, Input, Text} from '@ui-kitten/components';
 import * as ImagePicker from 'expo-image-picker';
 
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
+import {appId} from '../utils/variables';
+import {Video} from 'expo-av';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(
     'https://place-hold.it/300x300&text=Choose'
   );
-  const [type, setType] = useState('');
+  const [type, setType] = useState('image');
   const [imageSelected, setImageSelected] = useState(false);
   const {postMedia, loading} = useMedia();
+  const {postTag} = useTag();
   const {update, setUpdate} = useContext(MainContext);
 
   const {
     control,
     handleSubmit,
     formState: {errors},
+    setValue,
   } = useForm({
     defaultValues: {
       title: '',
@@ -56,6 +61,20 @@ const Upload = ({navigation}) => {
     }
   };
 
+  const resetUpload = () => {
+    setImage('https://place-hold.it/300x300&text=Choose');
+    setImageSelected(false);
+    setValue('title', '');
+    setValue('description', '');
+    setType('image');
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => resetUpload();
+    }, [])
+  );
+
   const onSubmit = async (data) => {
     if (!imageSelected) {
       Alert.alert('Please select a file');
@@ -76,22 +95,30 @@ const Upload = ({navigation}) => {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postMedia(formData, token);
       console.log('upload response', response);
-      Alert.alert('File', 'Uploaded', [
+      const tagResponse = await postTag(
         {
-          text: 'OK',
-          onPress: () => {
-            // TODO: clear form value after submission
-            setUpdate(update + 1);
-            navigation.navigate('Home');
-          },
+          file_id: response.file_id,
+          tag: appId,
         },
-      ]);
+        token
+      );
+      console.log('tag response', tagResponse);
+      tagResponse &&
+        Alert.alert('File', 'uploaded', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setUpdate(update + 1);
+              navigation.navigate('Home');
+            },
+          },
+        ]);
     } catch (e) {
       // let the user know the problem
-      console.log('onSubmit upload image problem');
+      console.log('onSubmit upload image problem', e.message);
     }
   };
-  console.log('loading', loading);
+  console.log('type', type);
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -102,11 +129,23 @@ const Upload = ({navigation}) => {
           style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}
         >
           <ScrollView>
-            <Image
-              source={{uri: image}}
-              style={styles.image}
-              onPress={pickImage}
-            ></Image>
+            {type === 'image' ? (
+              <Image
+                source={{uri: image}}
+                style={styles.image}
+                onPress={pickImage}
+              ></Image>
+            ) : (
+              <Video
+                source={{uri: image}}
+                style={styles.image}
+                useNativeControls={true}
+                resizeMode="cover"
+                onError={(error) => {
+                  console.error('video', error);
+                }}
+              />
+            )}
 
             <Controller
               control={control}
@@ -165,6 +204,14 @@ const Upload = ({navigation}) => {
               onPress={handleSubmit(onSubmit)}
             >
               Upload
+            </Button>
+            <Button
+              style={styles.button}
+              size="medium"
+              title="Reset form"
+              onPress={resetUpload}
+            >
+              Reset Form
             </Button>
           </ScrollView>
         </Card>

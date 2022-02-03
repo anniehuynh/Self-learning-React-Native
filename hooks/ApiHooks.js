@@ -1,7 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-
-import {apiUrl} from '../utils/variables';
+import {appId, apiUrl} from '../utils/variables';
 
 const doFetch = async (url, options = {}) => {
   try {
@@ -11,9 +10,8 @@ const doFetch = async (url, options = {}) => {
       return json;
     } else {
       const message = json.error
-        ? `${json.message} + ': ' + ${json.error} `
-        : `${json.message}`;
-
+        ? `${json.message}: ${json.error}`
+        : json.message;
       throw new Error(message || response.statusText);
     }
   } catch (error) {
@@ -26,15 +24,8 @@ const useMedia = () => {
   const [loading, setLoading] = useState(false);
   const {update} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
-    setLoading(true);
     try {
-      const response = await fetch(
-        `${apiUrl}media?start=${start}&limit=${limit}`
-      );
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      const json = await response.json();
+      const json = await useTag().getFilesByTag(appId);
       const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(apiUrl + 'media/' + item.file_id);
@@ -44,16 +35,12 @@ const useMedia = () => {
       );
       setMediaArray(media);
       // console.log(mediaArray);
-      // media && setLoading(false);
     } catch (error) {
       console.error(error);
-      // setLoading(false)
-    } finally {
-      setLoading(false);
     }
   };
   // Call loadMedia() only once when the component is loaded
-  // Or when the update state(MainContext) is changed
+  // OR when the update state (MainContext) is changed
   useEffect(() => {
     loadMedia(0, 5);
   }, [update]);
@@ -68,6 +55,7 @@ const useMedia = () => {
       },
       body: formData,
     };
+
     const result = await doFetch(apiUrl + 'media', options);
     result && setLoading(false);
     return result;
@@ -77,6 +65,7 @@ const useMedia = () => {
 
 const useLogin = () => {
   const postLogin = async (userCredentials) => {
+    // user credentials format: {username: 'someUsername', password: 'somePassword'}
     const options = {
       method: 'POST',
       headers: {
@@ -84,9 +73,9 @@ const useLogin = () => {
       },
       body: JSON.stringify(userCredentials),
     };
-
-    return doFetch(apiUrl + 'login', options);
+    return await doFetch(apiUrl + 'login', options);
   };
+
   return {postLogin};
 };
 
@@ -107,8 +96,9 @@ const useUser = () => {
       },
       body: JSON.stringify(data),
     };
-    return doFetch(apiUrl + 'users', options);
+    return await doFetch(apiUrl + 'users', options);
   };
+
   const putUser = async (data, token) => {
     const options = {
       method: 'PUT',
@@ -118,7 +108,7 @@ const useUser = () => {
       },
       body: JSON.stringify(data),
     };
-    return doFetch(apiUrl + 'users/', options);
+    return await doFetch(apiUrl + 'users', options);
   };
 
   const checkUsername = async (username) => {
@@ -135,6 +125,7 @@ const useTag = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-access-token': token,
       },
       body: JSON.stringify(tagData),
     };
@@ -147,4 +138,5 @@ const useTag = () => {
 
   return {postTag, getFilesByTag};
 };
+
 export {useMedia, useLogin, useUser, useTag};
