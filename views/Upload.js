@@ -25,7 +25,7 @@ const Upload = ({navigation}) => {
   );
   const [type, setType] = useState('');
   const [imageSelected, setImageSelected] = useState(false);
-  const {postMedia} = useMedia();
+  const {postMedia, loading} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
   const {
@@ -155,6 +155,7 @@ const Upload = ({navigation}) => {
               Choose Image
             </Button>
             <Button
+              loading={loading}
               style={styles.button}
               size="medium"
               title="Upload"

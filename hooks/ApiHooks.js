@@ -23,8 +23,10 @@ const doFetch = async (url, options = {}) => {
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [loading, setLoading] = useState(false);
   const {update} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${apiUrl}media?start=${start}&limit=${limit}`
@@ -42,6 +44,7 @@ const useMedia = () => {
       );
       setMediaArray(media);
       // console.log(mediaArray);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -53,6 +56,7 @@ const useMedia = () => {
   }, [update]);
 
   const postMedia = async (formData, token) => {
+    setLoading(true);
     const options = {
       method: 'POST',
       headers: {
@@ -61,9 +65,10 @@ const useMedia = () => {
       },
       body: formData,
     };
+    setLoading(false);
     return await doFetch(apiUrl + 'media', options);
   };
-  return {mediaArray, postMedia};
+  return {mediaArray, postMedia, loading};
 };
 
 const useLogin = () => {
