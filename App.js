@@ -5,8 +5,8 @@ import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {FeatherIconsPack} from './utils/feather-icons';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
+// Import from files
 import {default as theme} from './theme.json';
-import {default as mapping} from './mapping.json';
 import Navigator from './navigators/Navigator';
 import {MainProvider} from './contexts/MainContext';
 
@@ -25,11 +25,7 @@ const App = () => {
 export default () => (
   <>
     <IconRegistry icons={[EvaIconsPack, FeatherIconsPack]} />
-    <ApplicationProvider
-      {...eva}
-      theme={{...eva.light, ...theme}}
-      customMapping={mapping}
-    >
+    <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
       <App />
     </ApplicationProvider>
   </>
