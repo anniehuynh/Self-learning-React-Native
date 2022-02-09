@@ -25,7 +25,14 @@ const useMedia = () => {
   const {update} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
     try {
-      const json = await useTag().getFilesByTag(appId);
+      const response = await fetch(
+        `${apiUrl}media?start=${start}&limit=${limit}`
+      );
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      const json = await response.json();
+      // const json = await useTag().getFilesByTag(appId);
       const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(apiUrl + 'media/' + item.file_id);
@@ -42,7 +49,7 @@ const useMedia = () => {
   // Call loadMedia() only once when the component is loaded
   // OR when the update state (MainContext) is changed
   useEffect(() => {
-    loadMedia(0, 5);
+    loadMedia(0, 20);
   }, [update]);
 
   const postMedia = async (formData, token) => {
@@ -88,6 +95,14 @@ const useUser = () => {
     return await doFetch(apiUrl + 'users/user', options);
   };
 
+  const getUserById = async (userId, token) => {
+    const options = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    return await doFetch(`${apiUrl}users/${userId}`, options);
+  };
+
   const postUser = async (data) => {
     const options = {
       method: 'POST',
@@ -116,7 +131,7 @@ const useUser = () => {
     return result.available;
   };
 
-  return {getUserByToken, postUser, putUser, checkUsername};
+  return {getUserByToken, getUserById, postUser, putUser, checkUsername};
 };
 
 const useTag = () => {
