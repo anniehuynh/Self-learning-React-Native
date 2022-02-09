@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Import from UI Kitten Library
 import {
   Button,
   Text,
@@ -17,14 +19,21 @@ import {
   ButtonGroup,
   Layout,
 } from '@ui-kitten/components';
+
+// Logo
 import Logo from '../assets/logo.svg';
 
+// Lottie animation
+import LottieView from 'lottie-react-native';
+
+// Import from files
 import {MainContext} from '../contexts/MainContext';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
+  const animation = React.createRef(); // animation
   const [formToggle, setFormToggle] = useState(true);
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {getUserByToken} = useUser();
@@ -47,6 +56,7 @@ const Login = ({navigation}) => {
 
   useEffect(() => {
     checkToken();
+    animation.current?.play();
   }, []);
 
   return (
@@ -59,13 +69,12 @@ const Login = ({navigation}) => {
           <Text category={'h6'} style={styles.appTitle}>
             My App
           </Text>
-          <Logo
-            style={{
-              width: 70,
-              height: 70,
-              alignSelf: 'center',
-              marginBottom: 20,
-            }}
+          {/* <Logo style={styles.logo}/> */}
+          <LottieView
+            ref={animation}
+            source={require('../assets/lottie-animation.json')}
+            style={styles.animation}
+            loop={false}
           />
           <ButtonGroup
             style={{
@@ -107,6 +116,14 @@ const Login = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  animation: {
+    justifyContent: 'center',
+    flex: 1,
+    width: 30,
+    height: 30,
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -129,6 +146,12 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 
+  logo: {
+    width: 70,
+    height: 70,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   text: {
     fontWeight: '500',
     fontSize: 18,
