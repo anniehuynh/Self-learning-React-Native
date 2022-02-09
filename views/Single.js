@@ -1,19 +1,31 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, SafeAreaView, Image, ActivityIndicator} from 'react-native';
-import {Text, Card, Divider, Avatar} from '@ui-kitten/components';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
+import {Text, Card, Divider, Avatar, Button, Icon} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import {Video} from 'expo-av';
 
 import {uploadsUrl} from '../utils/variables';
 import {ListItem} from 'react-native-elements/dist/list/ListItem';
-import {useUser} from '../hooks/ApiHooks';
+import {useFavourite, useTag, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Single = ({route}) => {
   const {file} = route.params;
   const videoRef = useRef(null);
   const {getUserById} = useUser();
+  const {getFilesByTag} = useTag();
+  const {postFavourite, getFavourtiesByFileId, deleteFavourite} =
+    useFavourite();
   const [user, setUser] = useState({username: 'Loading User...'});
+  const [avatar, setAvatar] = useState('http://placekitten.com/180');
+  const [likes, setLikes] = useState([]);
+  const [userLike, setUserLike] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -26,47 +38,124 @@ const Single = ({route}) => {
     }
   };
 
+  const fetchAvatar = async () => {
+    try {
+      const avatarList = await getFilesByTag('avatar_' + file.user_id);
+      if (avatarList.length === 0) {
+        return;
+      }
+      const avatar = avatarList.pop();
+      setAvatar(uploadsUrl + avatar.filename);
+      console.log('single.js avatar', avatar);
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
+
+  // add to favourite
+  const fetchLikes = async () => {
+    try {
+      const likesData = await getFavourtiesByFileId(file.file_id);
+      setLikes(likesData);
+      // TODO: check if logged in user id is already in data and set state userLike
+    } catch (e) {
+      // TODO: Notify user
+      console.error('fetch like error', e);
+    }
+  };
+
+  const addLike = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      await postFavourite(file.file_id, token);
+    } catch (e) {
+      // TODO: what if user already liked a post?
+      console.error('Add Like error', e);
+    }
+  };
+  const unlike = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      await deleteFavourite(file.file_id, token);
+    } catch (e) {
+      console.error('Remove Like error', e);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
+    fetchAvatar();
+    fetchLikes();
   }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <Card style={styles.card}>
-        <Text category="h6" style={styles.title}>
-          {file.title}
-        </Text>
-        <Text category="s1" style={styles.title}>
-          {file.time_added}
-        </Text>
-        <Divider />
-        {file.media_type === 'image' ? (
-          <Image
-            source={{uri: uploadsUrl + file.filename}}
-            style={styles.image}
-            resizeMode="cover"
-            PlaceholderContent={<ActivityIndicator />}
-          />
-        ) : (
-          <Video
-            ref={videoRef}
-            style={styles.video}
-            source={{uri: uploadsUrl + file.filename}}
-            posterSource={{uri: uploadsUrl + file.screenshot}}
-            useNativeControls={true}
-            isLooping
-            resizeMode="contain"
-            onError={(error) => {
-              console.error('video error', error);
-            }}
-          ></Video>
-        )}
-        <Divider />
-        <Text>{file.description}</Text>
-        <ListItem>
-          <Avatar source={{uri: 'http://placekitten.com/180'}} />
-          <Text>{user.username}</Text>
-        </ListItem>
-      </Card>
+      <ScrollView>
+        <Card style={styles.card}>
+          <Text category="h6" style={styles.title}>
+            {file.title}
+          </Text>
+          <Text category="s1" style={styles.title}>
+            {file.time_added}
+          </Text>
+          <Divider />
+          {file.media_type === 'image' ? (
+            <Image
+              source={{uri: uploadsUrl + file.filename}}
+              style={styles.image}
+              resizeMode="cover"
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          ) : (
+            <Video
+              ref={videoRef}
+              style={styles.video}
+              source={{uri: uploadsUrl + file.filename}}
+              posterSource={{uri: uploadsUrl + file.screenshot}}
+              useNativeControls={true}
+              isLooping
+              resizeMode="contain"
+              onError={(error) => {
+                console.error('video error', error);
+              }}
+            ></Video>
+          )}
+          <Text>{file.description}</Text>
+
+          <Divider />
+          <ListItem>
+            <Avatar source={{uri: avatar}} />
+            <Text>{user.username}</Text>
+          </ListItem>
+
+          <ListItem>
+            <Button
+              style={styles.button}
+              disabled={userLike}
+              appearance="ghost"
+              onPress={() => {
+                addLike();
+              }}
+              accessoryLeft={<Icon name="heart" />}
+            >
+              Like
+            </Button>
+            <Button
+              style={styles.button}
+              disabled={!userLike}
+              appearance="ghost"
+              onPress={() => {
+                unlike();
+              }}
+              accessoryLeft={<Icon name="heart-outline" />}
+            >
+              Unlike
+            </Button>
+          </ListItem>
+          <ListItem>
+            <Text>Likes count: {likes.length}</Text>
+          </ListItem>
+        </Card>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -81,18 +170,18 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '95%',
-    height: '90%',
+    height: '95%',
     marginTop: 10,
   },
   image: {
     width: 370,
-    height: 450,
+    height: 300,
     alignSelf: 'center',
     margin: 20,
   },
   video: {
     width: 370,
-    height: 350,
+    height: 300,
     alignSelf: 'center',
     margin: 20,
   },

@@ -134,6 +134,7 @@ const useUser = () => {
   return {getUserByToken, getUserById, postUser, putUser, checkUsername};
 };
 
+// Tag
 const useTag = () => {
   const postTag = async (tagData, token) => {
     const options = {
@@ -154,4 +155,34 @@ const useTag = () => {
   return {postTag, getFilesByTag};
 };
 
-export {useMedia, useLogin, useUser, useTag};
+// Favorites: Like a post
+// https://media.mw.metropolia.fi/wbma/docs/#api-Favourite-GetFileFavourites
+const useFavourite = () => {
+  const postFavourite = async (fileId, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({file_id: fileId}),
+    };
+    return await doFetch(`${apiUrl}favourites`, options);
+  };
+  const getFavourtiesByFileId = async (fileId) => {
+    return await doFetch(`${apiUrl}favourites/file/${fileId}`);
+  };
+
+  // Unlike a post
+  const deleteFavourite = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    return await doFetch(`${apiUrl}favourites/file/${fileId}`, options);
+  };
+  return {postFavourite, deleteFavourite, getFavourtiesByFileId};
+};
+export {useMedia, useLogin, useUser, useTag, useFavourite};
