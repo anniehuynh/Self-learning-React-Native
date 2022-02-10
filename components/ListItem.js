@@ -44,22 +44,15 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <ButtonGroup style={styles.buttonGroup}>
             <Button
               accessoryLeft={<Icon name="edit-outline" />}
-              onPress={(index) => {
-                if (index === 0) {
-                  Alert.alert('Modified');
-                } else {
-                  Alert.alert('Delete');
-                }
+              onPress={() => {
+                Alert.alert('Modified');
+                navigation.navigate('Modify', {file: singleMedia});
               }}
             />
             <Button
               accessoryLeft={<Icon name="trash-2-outline" />}
-              onPress={(index) => {
-                if (index === 0) {
-                  Alert.alert('Modified');
-                } else {
-                  Alert.alert('Delete');
-                }
+              onPress={() => {
+                Alert.alert('Delete');
               }}
             />
           </ButtonGroup>

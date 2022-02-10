@@ -36,7 +36,7 @@ const useMedia = (myFilesOnly) => {
       */
       let json = await useTag().getFilesByTag(appId); // array that holds all media files
       if (myFilesOnly) {
-        // fileter files by user_id
+        // filter files by user_id
         json = json.filter((file) => file.user_id === user.user_id);
       }
       const media = await Promise.all(
@@ -73,7 +73,19 @@ const useMedia = (myFilesOnly) => {
     result && setLoading(false);
     return result;
   };
-  return {mediaArray, postMedia, loading};
+
+  const putMedia = async (data, token, fileId) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(data),
+    };
+    return await doFetch(apiUrl + `media/${fileId}`, options);
+  };
+  return {mediaArray, postMedia, loading, putMedia};
 };
 
 const useLogin = () => {
