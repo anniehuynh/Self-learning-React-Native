@@ -29,17 +29,17 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             {singleMedia.description}
           </Text>
         </View>
-
-        {/* <Button
-          style={styles.button}
-          title="View"
-          onPress={() => {
-            navigation.navigate('Single', {file: singleMedia});
-          }}
-        >
-          View
-        </Button> */}
-
+        {!myFilesOnly ? (
+          <Button
+            style={styles.button}
+            title="View"
+            onPress={() => {
+              navigation.navigate('Single', {file: singleMedia});
+            }}
+          >
+            View
+          </Button>
+        ) : null}
         {myFilesOnly && (
           <ButtonGroup style={styles.buttonGroup}>
             <Button
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   textbox: {
     flex: 3,
     alignSelf: 'center',
-    marginLeft: 30,
+    marginLeft: 35,
   },
 });
 
