@@ -72,7 +72,7 @@ const Login = ({navigation}) => {
           {/* <Logo style={styles.logo}/> */}
           <LottieView
             ref={animation}
-            source={require('../assets/animation.json')}
+            source={require('../assets/animation2.json')}
             style={styles.animation}
             loop={true}
           />
