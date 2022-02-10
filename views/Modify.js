@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ScrollView,
   StyleSheet,
-  Image,
   Alert,
   KeyboardAvoidingView,
   TouchableOpacity,
@@ -17,7 +16,6 @@ import {Button, Card, Input, Text} from '@ui-kitten/components';
 
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import {Video} from 'expo-av';
 
 const Modify = ({navigation, route}) => {
   const {file} = route.params;
@@ -66,11 +64,16 @@ const Modify = ({navigation, route}) => {
           style={{
             flex: 1,
             width: 340,
-            justifyContent: 'center',
+            top: 30,
+            justifyContent: 'flex-start',
             alignItems: 'center',
           }}
         >
-          <ScrollView>
+          <ScrollView
+            style={{
+              marginTop: 30,
+            }}
+          >
             <Controller
               control={control}
               rules={{
@@ -148,6 +151,7 @@ const styles = StyleSheet.create({
   },
   input: {
     margin: 10,
+    width: 250,
   },
 });
 

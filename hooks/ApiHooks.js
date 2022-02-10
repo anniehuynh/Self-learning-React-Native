@@ -85,7 +85,16 @@ const useMedia = (myFilesOnly) => {
     };
     return await doFetch(apiUrl + `media/${fileId}`, options);
   };
-  return {mediaArray, postMedia, loading, putMedia};
+
+  const deleteMedia = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    return await doFetch(`${apiUrl}media/${fileId}`, options);
+  };
+
+  return {mediaArray, postMedia, putMedia, deleteMedia, loading};
 };
 
 const useLogin = () => {

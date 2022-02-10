@@ -1,10 +1,35 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, ButtonGroup, Icon, Text, Card} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Import from files
 import {uploadsUrl} from '../utils/variables';
+import {useMedia} from '../hooks/ApiHooks';
+import {MainContext} from '../contexts/MainContext';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
+  const {deleteMedia} = useMedia();
+  const {update, setUpdate} = useContext(MainContext);
+  const doDelete = () => {
+    Alert.alert('Delete Post', 'Confirm delete action?', [
+      {text: 'Cancel'},
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const token = await AsyncStorage.getItem('userToken');
+            const response = await deleteMedia(singleMedia.file_id, token);
+            // update the list after deletion
+            response && setUpdate(update + 1);
+          } catch (e) {
+            console.error(e);
+          }
+        },
+      },
+    ]);
+  };
   return (
     <Card>
       <TouchableOpacity
@@ -45,14 +70,13 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             <Button
               accessoryLeft={<Icon name="edit-outline" />}
               onPress={() => {
-                Alert.alert('Modified');
                 navigation.navigate('Modify', {file: singleMedia});
               }}
             />
             <Button
               accessoryLeft={<Icon name="trash-2-outline" />}
               onPress={() => {
-                Alert.alert('Delete');
+                doDelete();
               }}
             />
           </ButtonGroup>
