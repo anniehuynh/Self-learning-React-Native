@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -14,6 +14,7 @@ import {uploadsUrl} from '../utils/variables';
 import {ListItem} from 'react-native-elements/dist/list/ListItem';
 import {useFavourite, useTag, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MainContext} from '../contexts/MainContext';
 
 const Single = ({route}) => {
   const {file} = route.params;
@@ -22,19 +23,20 @@ const Single = ({route}) => {
   const {getFilesByTag} = useTag();
   const {postFavourite, getFavourtiesByFileId, deleteFavourite} =
     useFavourite();
-  const [user, setUser] = useState({username: 'Loading User...'});
+  const [username, setUsername] = useState({username: 'Loading User...'});
   const [avatar, setAvatar] = useState('http://placekitten.com/180');
   const [likes, setLikes] = useState([]);
   const [userLike, setUserLike] = useState(false);
+  const {user} = useContext(MainContext);
 
   const fetchUser = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(file.user_id, token);
-      setUser(userData);
+      setUsername(userData);
     } catch (e) {
       console.error('fetch owner error', e);
-      setUser({username: '[not available]'});
+      setUsername({username: '[not available]'});
     }
   };
 
@@ -57,7 +59,9 @@ const Single = ({route}) => {
     try {
       const likesData = await getFavourtiesByFileId(file.file_id);
       setLikes(likesData);
-      // TODO: check if logged in user id is already in data and set state userLike
+      likesData.forEach((like) => {
+        like.user_id === user.user_id && setUserLike(true);
+      });
     } catch (e) {
       // TODO: Notify user
       console.error('fetch like error', e);
@@ -67,16 +71,17 @@ const Single = ({route}) => {
   const addLike = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      await postFavourite(file.file_id, token);
+      const response = await postFavourite(file.file_id, token);
+      response && setUserLike(true);
     } catch (e) {
-      // TODO: what if user already liked a post?
       console.error('Add Like error', e);
     }
   };
   const unlike = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      await deleteFavourite(file.file_id, token);
+      const response = await deleteFavourite(file.file_id, token);
+      response && setUserLike(false);
     } catch (e) {
       console.error('Remove Like error', e);
     }
@@ -85,8 +90,12 @@ const Single = ({route}) => {
   useEffect(() => {
     fetchUser();
     fetchAvatar();
-    fetchLikes();
   }, []);
+
+  useEffect(() => {
+    fetchLikes();
+  }, [userLike]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -124,7 +133,7 @@ const Single = ({route}) => {
           <Divider />
           <ListItem>
             <Avatar source={{uri: avatar}} />
-            <Text>{user.username}</Text>
+            <Text>{username.username}</Text>
           </ListItem>
 
           <ListItem>
