@@ -86,7 +86,7 @@ const LoginForm = () => {
       {errors.password && <Text>This is required.</Text>}
 
       <Button
-        style={{margin: 10, width: 250}}
+        style={{margin: 10, width: 250, alignSelf: 'center'}}
         title="Submit"
         onPress={handleSubmit(onSubmit)}
       >

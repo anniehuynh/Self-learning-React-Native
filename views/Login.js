@@ -72,9 +72,9 @@ const Login = ({navigation}) => {
           {/* <Logo style={styles.logo}/> */}
           <LottieView
             ref={animation}
-            source={require('../assets/lottie-animation.json')}
+            source={require('../assets/animation.json')}
             style={styles.animation}
-            loop={false}
+            loop={true}
           />
           <ButtonGroup
             style={{
@@ -117,12 +117,10 @@ const Login = ({navigation}) => {
 
 const styles = StyleSheet.create({
   animation: {
-    justifyContent: 'center',
-    flex: 1,
-    width: 30,
-    height: 30,
+    width: 250,
+    height: 250,
     marginBottom: 20,
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
   },
   container: {
     flex: 1,
@@ -135,13 +133,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   inner: {
-    flex: 1,
+    width: 400,
     top: 70,
   },
   card: {marginTop: 20},
   form: {
-    flex: 1,
-    justifyContent: 'flex-start',
+    alignSelf: 'center',
+    width: 300,
     marginBottom: 100,
     marginTop: 40,
   },
