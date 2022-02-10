@@ -7,10 +7,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Single from '../views/Single';
+import MyFiles from '../views/MyFiles';
 import Upload from '../views/Upload';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import ModifyUser from '../views/ModifyUser';
+import Modify from '../views/Modify';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -73,6 +75,8 @@ const StackScreen = () => {
             name="Edit Profile"
             component={ModifyUser}
           ></Stack.Screen>
+          <Stack.Screen name="My Files" component={MyFiles}></Stack.Screen>
+          <Stack.Screen name="Modify" component={Modify}></Stack.Screen>
         </>
       ) : (
         <Stack.Screen

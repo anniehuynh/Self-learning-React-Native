@@ -1,13 +1,18 @@
 import React from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, Card} from '@ui-kitten/components';
+import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, ButtonGroup, Icon, Text, Card} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 
-const ListItem = ({navigation, singleMedia}) => {
+const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   return (
     <Card>
-      <TouchableOpacity style={styles.row}>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => {
+          navigation.navigate('Single', {file: singleMedia});
+        }}
+      >
         <View style={styles.imagebox}>
           <Image
             style={styles.image}
@@ -24,7 +29,8 @@ const ListItem = ({navigation, singleMedia}) => {
             {singleMedia.description}
           </Text>
         </View>
-        <Button
+
+        {/* <Button
           style={styles.button}
           title="View"
           onPress={() => {
@@ -32,7 +38,32 @@ const ListItem = ({navigation, singleMedia}) => {
           }}
         >
           View
-        </Button>
+        </Button> */}
+
+        {myFilesOnly && (
+          <ButtonGroup style={styles.buttonGroup}>
+            <Button
+              accessoryLeft={<Icon name="edit-outline" />}
+              onPress={(index) => {
+                if (index === 0) {
+                  Alert.alert('Modified');
+                } else {
+                  Alert.alert('Delete');
+                }
+              }}
+            />
+            <Button
+              accessoryLeft={<Icon name="trash-2-outline" />}
+              onPress={(index) => {
+                if (index === 0) {
+                  Alert.alert('Modified');
+                } else {
+                  Alert.alert('Delete');
+                }
+              }}
+            />
+          </ButtonGroup>
+        )}
       </TouchableOpacity>
     </Card>
   );
@@ -49,6 +80,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 50,
     alignSelf: 'center',
+  },
+  buttonGroup: {
+    flex: 2.5,
+    right: -20,
+    alignSelf: 'flex-end',
   },
   imagebox: {
     flex: 1,
@@ -67,15 +103,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   textbox: {
-    flex: 2,
+    flex: 3,
     alignSelf: 'center',
-    marginLeft: 10,
+    marginLeft: 30,
   },
 });
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
+  myFilesOnly: PropTypes.bool,
 };
 
 export default ListItem;

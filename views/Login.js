@@ -21,7 +21,7 @@ import {
 } from '@ui-kitten/components';
 
 // Logo
-import Logo from '../assets/logo.svg';
+// import Logo from '../assets/logo.svg';
 
 // Lottie animation
 import LottieView from 'lottie-react-native';

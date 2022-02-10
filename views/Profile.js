@@ -92,6 +92,16 @@ const Profile = ({navigation}) => {
         >
           Edit Profile
         </Button>
+        <Button
+          title="My Files"
+          accessoryLeft={<Icon name="image-outline" />}
+          style={{marginTop: 15, width: 320}}
+          onPress={() => {
+            navigation.navigate('My Files');
+          }}
+        >
+          My Files
+        </Button>
       </Card>
     </Layout>
   );
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fafafa',
     flexWrap: 'wrap',
     alignItems: 'center',
     paddingTop: 40,
